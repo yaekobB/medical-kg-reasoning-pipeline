@@ -1,4 +1,12 @@
 * text=auto
+
+# Shell scripts must stay LF for Docker/Linux
 *.sh text eol=lf
-docker/entrypoint.sh text eol=lf
-run_all.sh text eol=lf
+
+# Also keep these LF so GitHub renders them consistently
+*.yml text eol=lf
+Dockerfile text eol=lf
+*.txt text eol=lf
+*.md text eol=lf
+
+
