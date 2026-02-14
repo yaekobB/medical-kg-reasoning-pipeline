@@ -57,7 +57,6 @@ End‑to‑end, Docker‑first pipeline that converts a medical CSV into an RDF 
 ├─ run_all.sh
 ├─ requirements.txt
 ├─ README.md
-├─ import_medical_kg_to_neo4j.py
 ├─ data/
 │  ├─ raw/         # original dataset(s)
 │  ├─ processed/   # generated CSV + TTL files + reports
