@@ -295,10 +295,6 @@ docker compose down
   - `data/processed/`
   - `data/visualizations/`
 
-### Docker/Linux shell error like `/bin/sh^M: bad interpreter`
-This is caused by Windows CRLF line endings in shell scripts.  
-This repo includes `.gitattributes` to enforce LF for `*.sh`. Re‑clone/pull and rebuild the container.
-
 ---
 
 ## License / disclaimer
