@@ -17,7 +17,6 @@ End‑to‑end, Docker‑first pipeline that converts a medical CSV into an RDF 
 - [Local run (without Docker)](#local-run-without-docker)
 - [Configuration](#configuration)
 - [LLM tabs (Ollama)](#llm-tabs-ollama)
-- [Neo4j import (optional)](#neo4j-import-optional)
 - [Troubleshooting](#troubleshooting)
 - [License / disclaimer](#license--disclaimer)
 
@@ -256,19 +255,6 @@ export OLLAMA_BASE_URL="http://host.docker.internal:11434"
 ```
 
 Or place it in `docker-compose.yml` under `environment:`.
-
----
-
-## Neo4j import (optional)
-
-A helper script is included:
-
-```bash
-python import_medical_kg_to_neo4j.py
-```
-
-You can adapt connection settings inside the script or pass parameters if supported by your version.  
-Recommended: import **inferred** KG (`data_medical_large_inferred.ttl`) if you want reasoning‑enriched graphs in Neo4j.
 
 ---
 
