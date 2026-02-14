@@ -1,0 +1,23 @@
+# Core scientific stack
+numpy>=1.26
+pandas>=2.2
+
+# RDF / reasoning
+rdflib>=7.0
+owlrl>=6.0
+
+# Graphs and visualization
+networkx>=3.2
+matplotlib>=3.8
+
+# Graphviz Python bindings (for ontology diagram)
+graphviz>=0.21
+
+# Web app framework
+streamlit
+
+# LLM integrations
+ollama
+
+# SHACL validation
+pyshacl

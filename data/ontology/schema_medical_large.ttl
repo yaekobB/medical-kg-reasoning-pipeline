@@ -1,0 +1,168 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix med:  <http://example.org/medkg#> .
+
+#################################################################
+# Ontology header
+#################################################################
+
+med:
+    a owl:Ontology ;
+    rdfs:label "Medical Knowledge Graph Ontology (Large Project)" ;
+    rdfs:comment "Schema for diseases, symptoms, treatments, body systems and basic reasoning for the medical KG." .
+
+#################################################################
+# Core Classes
+#################################################################
+
+med:Disease a owl:Class ;
+    rdfs:label "Disease" ;
+    rdfs:comment "A medical disease or condition that can have symptoms, treatments, and affect body systems." .
+
+med:InfectiousDisease a owl:Class ;
+    rdfs:label "Infectious disease" ;
+    rdfs:subClassOf med:Disease ;
+    rdfs:comment "Diseases that are caused by infectious agents and may be contagious." .
+
+med:ChronicDisease a owl:Class ;
+    rdfs:label "Chronic disease" ;
+    rdfs:subClassOf med:Disease ;
+    rdfs:comment "Diseases that are long-lasting or persistent over time." .
+
+med:Symptom a owl:Class ;
+    rdfs:label "Symptom" ;
+    rdfs:comment "A clinical manifestation or complaint experienced by the patient." .
+
+med:Treatment a owl:Class ;
+    rdfs:label "Treatment" ;
+    rdfs:comment "Any intervention (drug, procedure, therapy, lifestyle) used to treat a disease." .
+
+med:BodySystem a owl:Class ;
+    rdfs:label "Body system" ;
+    rdfs:comment "A high-level physiological system or organ group affected by diseases (e.g., respiratory, cardiovascular)." .
+
+#################################################################
+# Object Properties
+#################################################################
+
+med:hasSymptom a owl:ObjectProperty ;
+    rdfs:label "has symptom" ;
+    rdfs:domain med:Disease ;
+    rdfs:range med:Symptom ;
+    rdfs:comment "Links a disease to a symptom that it typically causes or is associated with." .
+
+med:treatedWith a owl:ObjectProperty ;
+    rdfs:label "treated with" ;
+    rdfs:domain med:Disease ;
+    rdfs:range med:Treatment ;
+    rdfs:comment "Links a disease to a treatment that is used to manage or cure it." .
+
+med:affectsSystem a owl:ObjectProperty ;
+    rdfs:label "affects body system" ;
+    rdfs:domain med:Disease ;
+    rdfs:range med:BodySystem ;
+    rdfs:comment "Indicates which body system is primarily affected by a disease." .
+
+#################################################################
+# Datatype Properties
+#################################################################
+
+med:diseaseCode a owl:DatatypeProperty ;
+    rdfs:label "disease code" ;
+    rdfs:domain med:Disease ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Code of the disease (e.g., D001, D002) taken from the source dataset." .
+
+med:isChronic a owl:DatatypeProperty ;
+    rdfs:label "is chronic" ;
+    rdfs:domain med:Disease ;
+    rdfs:range xsd:boolean ;
+    rdfs:comment "Boolean flag indicating whether the disease is chronic." .
+
+med:isContagious a owl:DatatypeProperty ;
+    rdfs:label "is contagious" ;
+    rdfs:domain med:Disease ;
+    rdfs:range xsd:boolean ;
+    rdfs:comment "Boolean flag indicating whether the disease is contagious." .
+
+#################################################################
+# Body System Individuals
+#################################################################
+
+# These individuals correspond to the values in the `body_system`
+# column of diseases_large.csv. The Python builder maps strings
+# (e.g. "respiratory") to these URIs.
+
+med:CardiovascularSystem a med:BodySystem ;
+    rdfs:label "Cardiovascular system" ;
+    rdfs:comment "Heart and blood vessels." .
+
+med:RespiratorySystem a med:BodySystem ;
+    rdfs:label "Respiratory system" ;
+    rdfs:comment "Lungs and airways." .
+
+med:EndocrineMetabolicSystem a med:BodySystem ;
+    rdfs:label "Endocrine and metabolic system" ;
+    rdfs:comment "Endocrine glands and metabolic regulation (e.g. diabetes, thyroid disorders)." .
+
+med:DigestiveHepaticSystem a med:BodySystem ;
+    rdfs:label "Digestive and hepatic system" ;
+    rdfs:comment "Gastrointestinal tract, liver, biliary tree and pancreas." .
+
+med:NervousSystem a med:BodySystem ;
+    rdfs:label "Nervous system" ;
+    rdfs:comment "Central and peripheral nervous system." .
+
+med:MusculoskeletalSystem a med:BodySystem ;
+    rdfs:label "Musculoskeletal system" ;
+    rdfs:comment "Bones, joints, muscles, tendons, ligaments." .
+
+med:DermatologicSystem a med:BodySystem ;
+    rdfs:label "Integumentary / dermatologic system" ;
+    rdfs:comment "Skin, hair, nails and related structures." .
+
+med:GenitourinaryReproductiveSystem a med:BodySystem ;
+    rdfs:label "Genitourinary and reproductive system" ;
+    rdfs:comment "Kidneys, urinary tract and reproductive organs." .
+
+med:OphthalmologicSystem a med:BodySystem ;
+    rdfs:label "Ophthalmologic system" ;
+    rdfs:comment "Eyes and vision." .
+
+med:ENTSystem a med:BodySystem ;
+    rdfs:label "ENT system" ;
+    rdfs:comment "Ear–nose–throat structures." .
+
+med:HematologicOncologicSystem a med:BodySystem ;
+    rdfs:label "Hematologic / oncologic system" ;
+    rdfs:comment "Blood disorders and malignancies." .
+
+med:ImmuneRheumatologicSystem a med:BodySystem ;
+    rdfs:label "Immune / rheumatologic system" ;
+    rdfs:comment "Autoimmune and systemic inflammatory diseases." .
+
+med:PsychiatricSystem a med:BodySystem ;
+    rdfs:label "Psychiatric / mental health system" ;
+    rdfs:comment "Mental health and behavioral disorders." .
+
+med:InfectiousSystemicCategory a med:BodySystem ;
+    rdfs:label "Infectious systemic category" ;
+    rdfs:comment "Systemic infectious diseases not tied to a single organ system." .
+
+med:ToxicologicCategory a med:BodySystem ;
+    rdfs:label "Toxicologic category" ;
+    rdfs:comment "Poisonings and intoxications." .
+
+med:OralDentalSystem a med:BodySystem ;
+    rdfs:label "Oral / dental system" ;
+    rdfs:comment "Teeth, gums and oral cavity." .
+
+med:SystemicOtherCategory a med:BodySystem ;
+    rdfs:label "Systemic / other category" ;
+    rdfs:comment "Multisystem or poorly localized systemic conditions." .
+
+med:UnknownSystem a med:BodySystem ;
+    rdfs:label "Unknown / not classified" ;
+    rdfs:comment "Used when the primary body system is not determined or is unknown." .

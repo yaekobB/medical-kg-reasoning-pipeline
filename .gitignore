@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit secrets (if any)
+.streamlit/secrets.toml
+
+# Optional: ignore heavy data + outputs (uncomment if needed)
+# data/raw/
+# data/processed/
+# data/outputs/
+# *.csv
+# *.ttl
+# *.rdf

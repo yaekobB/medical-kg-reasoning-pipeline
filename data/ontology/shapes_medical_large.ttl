@@ -1,0 +1,207 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix med:  <http://example.org/medkg#> .
+
+#################################################################
+# 8 practical constraints total (aligned with your KG):
+#  - Disease-like nodes: label, diseaseCode, affectsSystem, hasSymptom,
+#    isChronic, isContagious
+#  - Symptom: label
+#  - Treatment: label
+#
+# NOTE: We target Disease, ChronicDisease, InfectiousDisease so RAW graph
+# is validated too (even before RDFS infers med:Disease for subclasses).
+#################################################################
+
+med:DiseaseShape
+  a sh:NodeShape ;
+
+  # Apply to all disease-category nodes (RAW + INFERRED)
+  sh:targetClass med:Disease ;
+  sh:targetClass med:ChronicDisease ;
+  sh:targetClass med:InfectiousDisease ;
+
+  # (1) label: exactly 1 (allow either "text"@en or plain "text")
+  sh:property [
+    sh:path rdfs:label ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:or (
+      [ sh:datatype rdf:langString ]
+      [ sh:datatype xsd:string ]
+    ) ;
+  ] ;
+
+  # (2) diseaseCode: exactly 1 + datatype string + pattern D001
+  sh:property [
+    sh:path med:diseaseCode ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:string ;
+    sh:pattern "^D\\d{3}$" ;
+  ] ;
+
+  # (3) affectsSystem: exactly 1 and must point to a BodySystem individual
+  sh:property [
+    sh:path med:affectsSystem ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:class med:BodySystem ;
+  ] ;
+
+  # (4) hasSymptom: at least 1 and must point to Symptom nodes
+  sh:property [
+    sh:path med:hasSymptom ;
+    sh:minCount 1 ;
+    sh:class med:Symptom ;
+  ] ;
+
+  # (5) isChronic: exactly 1 boolean
+  sh:property [
+    sh:path med:isChronic ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:boolean ;
+  ] ;
+
+  # (6) isContagious: exactly 1 boolean
+  sh:property [
+    sh:path med:isContagious ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:boolean ;
+  ] .
+
+  # (NEW) treatedWith: at least 1 and must point to Treatment nodes
+  #sh:property [
+  #  sh:path med:treatedWith ;
+  #  sh:minCount 1 ;
+  #  sh:class med:Treatment ;
+  #] .
+
+
+# (7) Symptom label required
+med:SymptomShape
+  a sh:NodeShape ;
+  sh:targetClass med:Symptom ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:minCount 1 ;
+    sh:or (
+      [ sh:datatype rdf:langString ]
+      [ sh:datatype xsd:string ]
+    ) ;
+  ] .
+
+# (8) Treatment label required
+med:TreatmentShape
+  a sh:NodeShape ;
+  sh:targetClass med:Treatment ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:minCount 1 ;
+    sh:or (
+      [ sh:datatype rdf:langString ]
+      [ sh:datatype xsd:string ]
+    ) ;
+  ] .
+
+  
+
+#################################################################
+# EXTRA QUALITY CONSTRAINTS (safe upgrades)
+#################################################################
+
+# --- Strengthen Disease links: ensure IRIs, and validate treatedWith targets (0+ allowed)
+med:DiseaseLinksShape
+  a sh:NodeShape ;
+  sh:targetClass med:Disease ;
+  sh:targetClass med:ChronicDisease ;
+  sh:targetClass med:InfectiousDisease ;
+
+  sh:property [
+    sh:path med:affectsSystem ;
+    sh:nodeKind sh:IRI ;
+  ] ;
+
+  sh:property [
+    sh:path med:hasSymptom ;
+    sh:nodeKind sh:IRI ;
+  ] ;
+
+  sh:property [
+    sh:path med:treatedWith ;
+    sh:nodeKind sh:IRI ;
+    sh:class med:Treatment ;
+  ] ;
+
+  sh:property [
+    sh:path med:diseaseCode ;
+    sh:nodeKind sh:Literal ;
+  ] ;
+
+  sh:property [
+    sh:path med:isChronic ;
+    sh:nodeKind sh:Literal ;
+  ] ;
+
+  sh:property [
+    sh:path med:isContagious ;
+    sh:nodeKind sh:Literal ;
+  ] .
+
+# --- Add label length bounds (data quality)
+med:DiseaseLabelQualityShape
+  a sh:NodeShape ;
+  sh:targetClass med:Disease ;
+  sh:targetClass med:ChronicDisease ;
+  sh:targetClass med:InfectiousDisease ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:minLength 2 ;
+    sh:maxLength 200 ;
+  ] .
+
+med:SymptomLabelQualityShape
+  a sh:NodeShape ;
+  sh:targetClass med:Symptom ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:minLength 2 ;
+    sh:maxLength 300 ;
+  ] .
+
+med:TreatmentLabelQualityShape
+  a sh:NodeShape ;
+  sh:targetClass med:Treatment ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:minLength 2 ;
+    sh:maxLength 500 ;
+  ] .
+
+# --- Category consistency: ChronicDisease implies isChronic=true
+med:ChronicConsistencyShape
+  a sh:NodeShape ;
+  sh:targetClass med:ChronicDisease ;
+  sh:property [
+    sh:path med:isChronic ;
+    sh:hasValue true ;
+  ] .
+
+# --- Body system must have a label (clean ontology)
+med:BodySystemShape
+  a sh:NodeShape ;
+  sh:targetClass med:BodySystem ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:or (
+      [ sh:datatype rdf:langString ]
+      [ sh:datatype xsd:string ]
+    ) ;
+  ] .
+

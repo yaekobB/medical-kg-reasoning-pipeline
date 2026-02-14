@@ -1,0 +1,32 @@
+@prefix med:  <http://example.org/medkg#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+#################################################################
+# OWL extension axioms used ONLY for demonstrating RDFS limits
+#################################################################
+
+# Limitation 1 : Logical class
+med:RespiratoryChronicDisease
+    a owl:Class ;
+    rdfs:label "Respiratory chronic disease (OWL-defined)"@en ;
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:intersectionOf (
+            med:ChronicDisease
+            [
+                a owl:Restriction ;
+                owl:onProperty med:affectsSystem ;
+                owl:hasValue med:RespiratorySystem
+            ]
+        )
+    ] .
+
+# Limitation 2 : inverseOf propertieys
+
+@prefix med: <http://example.org/medkg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# Inverse property demo (Limitation #2)
+med:symptomOf owl:inverseOf med:hasSymptom .

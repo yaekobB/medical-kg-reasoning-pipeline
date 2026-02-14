@@ -1,0 +1,33 @@
+services:
+  medicalkg:
+    build: .
+    container_name: medicalkg
+    working_dir: /app
+
+    volumes:
+      - ./data:/app/data
+      - venv:/app/.venv
+
+    ports:
+      - "8501:8501"
+
+    environment:
+      RUN_SHACL: "1"
+      RUN_SHACL_INFERRED: "1"
+      RUN_RDFS_LIMIT: "1"
+      RUN_STREAMLIT: "1"
+
+      # ✅ Make container call Ollama on your Windows host
+      OLLAMA_BASE_URL: "http://host.docker.internal:11434"
+      OLLAMA_MODEL: "llama3.2"     # used by LLMLarge
+      OLLAMA_CHAT_MODEL: "llama3.2:1b"  # used by LLMsimple (chat)
+
+    # ✅ Needed on Linux; harmless on Windows; ensures host.docker.internal works
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    entrypoint: ["/app/docker/entrypoint.sh"]
+    command: ["ui"]
+
+volumes:
+  venv:
