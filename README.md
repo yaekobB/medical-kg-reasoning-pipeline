@@ -131,25 +131,17 @@ If these exist, the pipeline is working and persistence via Docker volume is cor
 
 Add your images under `assets/` (recommended) and embed them in this README using relative paths.
 
-### Stream / pipeline visualizations
-
-<img src="assets/instance_kg_large_sample.png" alt="Instance-level KG sample" width="900"/>
-
 ### Neo4j exploration (examples)
 
 **Ontology / schema view**
 
 <img src="assets/neo4j_ontology.png" alt="Neo4j ontology view" width="900"/>
-<img src="assets/neo4j_schema_level.png" alt="Neo4j schema-level view" width="900"/>
 
 **Instance explorations**
 
-<img src="assets/neo4j_disease_symptom.png" alt="Neo4j: diseases and symptoms" width="900"/>
-<img src="assets/neo4j_disease_treatment.png" alt="Neo4j: diseases and treatments" width="900"/>
-<img src="assets/neo4j_single_disease_symptom_treatment.png" alt="Neo4j: single disease, symptoms and treatment" width="900"/>
 <img src="assets/neo4j_single_disease_treatment.png" alt="Neo4j: single disease, treatment" width="900"/>
 <img src="assets/neo4j_fever_more_disease.png" alt="Neo4j: fever connected diseases" width="900"/>
-<img src="assets/neo4j_treatment_with_morethan_5_disease.png" alt="Neo4j: treatments connected to many diseases" width="900"/>
+<img src="assets/neo4j_treatment_with_morethan_5_diease.png" alt="Neo4j: treatments connected to many diseases" width="900"/>
 
 > Tip: If images look too large on GitHub, reduce `width="900"` to `width="700"` or `width="600"`.
 
